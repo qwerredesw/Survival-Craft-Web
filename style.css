@@ -1,31 +1,55 @@
+/* Черный фон для "полей" (letterboxing) */
+html {
+    background-color: #000;
+    height: 100%;
+}
+
 body {
-    background-color: #333;
-    color: #fff;
     font-family: Arial, sans-serif;
     text-align: center;
     margin: 0;
-    padding: 20px;
-    /* Запрещаем прокрутку */
-    overflow: hidden; 
+    padding: 0;
+    
+    /* Новые стили для центрирования */
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* 100% высоты экрана */
+    color: #fff;
+    overflow: hidden;
 }
 
+h1, p {
+    margin: 5px; /* Уменьшаем отступы на мобильном */
+    flex-shrink: 0; /* Не даем тексту сжиматься */
+}
+
+/* Контейнер, который займет все оставшееся место */
+.game-container {
+    flex-grow: 1;
+    width: 100%;
+    display: grid;
+    place-items: center; /* Магия: центрирует холст по X и Y */
+    overflow: hidden;
+}
+
+/* Стили для самого холста */
 canvas {
-    background-color: #5d945d; /* Зеленый, как трава */
+    background-color: #5d945d;
     border: 3px solid #fff;
     border-radius: 8px;
-    display: block;
-    margin: 20px auto; 
 
-    /* ВАЖНЫЕ СТИЛИ ДЛЯ КАСАНИЙ */
-    
-    /* Запрещает браузеру обрабатывать касания (прокрутка, масштабирование) */
+    /* МАГИЯ МАСШТАБИРОВАНИЯ: 
+      Эти стили заставят холст (800x600) вписаться
+      в контейнер, сохранив пропорции.
+    */
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+
+    /* Стили для касаний (остаются) */
     touch-action: none;
-    
-    /* Запрещает выделение */
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
-    
-    /* Запрещает контекстное меню при долгом нажатии */
-    -webkit-touch-callout: none; 
+    -webkit-touch-callout: none;
 }
