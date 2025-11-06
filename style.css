@@ -1,0 +1,31 @@
+body {
+    background-color: #333;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+    /* Запрещаем прокрутку */
+    overflow: hidden; 
+}
+
+canvas {
+    background-color: #5d945d; /* Зеленый, как трава */
+    border: 3px solid #fff;
+    border-radius: 8px;
+    display: block;
+    margin: 20px auto; 
+
+    /* ВАЖНЫЕ СТИЛИ ДЛЯ КАСАНИЙ */
+    
+    /* Запрещает браузеру обрабатывать касания (прокрутка, масштабирование) */
+    touch-action: none;
+    
+    /* Запрещает выделение */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    
+    /* Запрещает контекстное меню при долгом нажатии */
+    -webkit-touch-callout: none; 
+}
