@@ -80,12 +80,20 @@ const joystick = {
 
 // --- УПРАВЛЕНИЕ ---
 
+// !!! ИСПРАВЛЕННАЯ ФУНКЦИЯ getPos !!!
 function getPos(canvasEl, evt) {
     const rect = canvasEl.getBoundingClientRect();
+    
+    // Вычисляем, во сколько раз CSS сжал наш холст
+    const scaleX = canvasEl.width / rect.width;   // e.g. 800 / 390 = 2.05
+    const scaleY = canvasEl.height / rect.height; // e.g. 600 / 292 = 2.05
+
     const touch = evt.touches ? evt.touches[0] : evt;
+    
+    // Берем "CSS-координаты" касания и умножаем на коэф. масштабирования
     return {
-        x: touch.clientX - rect.left,
-        y: touch.clientY - rect.top
+        x: (touch.clientX - rect.left) * scaleX, // Получаем настоящие 800px-координаты
+        y: (touch.clientY - rect.top) * scaleY   // Получаем настоящие 600px-координаты
     };
 }
 
@@ -101,7 +109,7 @@ function onStart(e) {
     joystick.knobY = pos.y;
 }
 
-// 2. ДВИЖЕНИЕ (Мышь или Палец) - ИСПРАВЛЕННАЯ ВЕРСИЯ
+// 2. ДВИЖЕНИЕ (Мышь или Палец) - ИСПРАВЛЕННАЯ ВЕРСИЯ (с "мертвой зоной")
 function onMove(e) {
     e.preventDefault();
     if (!joystick.active) return;
@@ -111,9 +119,7 @@ function onMove(e) {
     const dy = pos.y - joystick.baseY;
     const dist = Math.hypot(dx, dy);
 
-    // !!! ИСПРАВЛЕНИЕ: "Мертвая зона" для клика.
-    // Не считать это "движением" (для клика),
-    // пока мы не сдвинемся дальше 5 пикселей.
+    // "Мертвая зона" для клика
     const CLICK_DEADZONE = 5;
     if (dist > CLICK_DEADZONE) {
         joystick.moved = true;
@@ -315,7 +321,6 @@ function handleStationInteractions() {
             }
             // ЛОГИКА "МАНУАЛЬНОЙ" ПОКУПКИ 
             // (Срабатывает, если авто-покупка ЕЩЕ НЕ КУПЛЕНА)
-            // (будет покупать очень быстро, пока есть дерево)
             else if (!autoBuyPurchased && wood >= axeUpgradeCost) {
                 wood -= axeUpgradeCost;
                 axeCount++;
